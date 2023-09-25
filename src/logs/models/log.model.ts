@@ -18,8 +18,8 @@ export class Log {
   startTime: string;
 
   @Field()
-  createdDate: string;
+  createdAt: string;
 
   @Field({ nullable: true })
-  updatedDate: string;
+  updatedAt: string;
 }

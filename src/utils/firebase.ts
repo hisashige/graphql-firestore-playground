@@ -18,5 +18,6 @@ export async function initFirebase() {
 }
 
 export function getFirestore() {
-  return firebaseApp ? firebaseApp.firestore() : null;
+  if (firebaseApp === null) throw new Error("Firestore is not initialized");
+  return firebaseApp.firestore();
 }

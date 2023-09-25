@@ -11,29 +11,30 @@ type Quest {
   name: String!
   totalMinutes: Float!
   delete: Boolean!
-  createdDate: String!
-  updatedDate: String
+  createdAt: String!
+  updatedAt: String
 }
 
 type Query {
-  quest(id: Float!): Quest!
   quests(uid: String!): [Quest!]!
 }
 
 type Mutation {
-  addQuest(newQuestData: NewQuestInput!): Quest!
-  addQuests(newQuestsData: [NewQuestInput!]!): [Quest!]!
-  removeQuest(id: Float!): Boolean!
+  editQuests(bulkUpdateQuestsData: BulkUpdateQuestInput!): [Quest!]!
 }
 
-input NewQuestInput {
-  id: Int!
+input BulkUpdateQuestInput {
   uid: ID!
+  quests: [QuestInput!]!
+}
+
+input QuestInput {
+  id: Int!
   name: String!
   totalMinutes: Float!
   delete: Boolean!
 }
 
 type Subscription {
-  questAdded: [Quest!]!
+  questEdited: [Quest!]!
 }

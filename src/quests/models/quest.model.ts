@@ -18,8 +18,8 @@ export class Quest {
   delete: boolean;
 
   @Field()
-  createdDate: string;
+  createdAt: string;
 
   @Field({ nullable: true })
-  updatedDate: string;
+  updatedAt: string;
 }
