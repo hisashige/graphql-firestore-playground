@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { QuestInput } from "./dto/quest.input";
 import { QuestsArgs } from "./dto/quests.args";
 import { Quest } from "./models/quest.model";
 import { getQuestCollection } from "src/utils/firestore";
@@ -24,7 +23,7 @@ export class QuestsService {
           .where("id", "==", item.id)
           .get();
 
-        let modifyItem = { ...item, uid: data.uid } as QuestItem;
+        const modifyItem = { ...item, uid: data.uid } as QuestItem;
 
         if (exitData.docs.length > 0) {
           // 更新
@@ -45,20 +44,26 @@ export class QuestsService {
 
       return rtnItems as Quest[];
     } catch (e) {
-      console.error("Error updating document: ", e);
+      console.error("Error updating quest: ", e);
+      throw new Error(`クエストの更新に失敗しました。: ${e}`);
     }
   }
 
   async findListByUid(questsArgs: QuestsArgs): Promise<Quest[]> {
-    const questCollection = getQuestCollection();
-    const quests = await questCollection
-      .where("uid", "==", questsArgs.uid)
-      .get();
+    try {
+      const questCollection = getQuestCollection();
+      const quests = await questCollection
+        .where("uid", "==", questsArgs.uid)
+        .get();
 
-    if (quests.docs.length > 0) {
-      return quests.docs.map((doc) => doc.data()) as Quest[];
+      if (quests.docs.length > 0) {
+        return quests.docs.map((doc) => doc.data()) as Quest[];
+      }
+
+      return [] as Quest[];
+    } catch (e) {
+      console.error("Error finding quests: ", e);
+      throw new Error(`クエストリストの取得に失敗しました。: ${e}`);
     }
-
-    return [] as Quest[];
   }
 }

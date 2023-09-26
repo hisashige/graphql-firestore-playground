@@ -4,7 +4,7 @@
 
 directive @upper on FIELD_DEFINITION
 
-"""quset """
+"""quest """
 type Quest {
   id: Int!
   uid: ID!
@@ -15,12 +15,30 @@ type Quest {
   updatedAt: String
 }
 
+"""log """
+type Log {
+  id: Int!
+  uid: String!
+  questId: Int!
+  enemy: String!
+  minutes: Int!
+  done: Boolean!
+  startTime: String!
+  createdAt: String!
+  updatedAt: String
+}
+
 type Query {
   quests(uid: String!): [Quest!]!
+  log(uid: String!, id: Float!): Log!
+  logs(uid: String!): [Log!]!
 }
 
 type Mutation {
   editQuests(bulkUpdateQuestsData: BulkUpdateQuestInput!): [Quest!]!
+  addLog(addLogInput: NewLogInput!): Log!
+  updateLog(updateLogInput: UpdateLogInput!): Log!
+  removeLog(uid: String!, id: Float!): Boolean!
 }
 
 input BulkUpdateQuestInput {
@@ -35,6 +53,27 @@ input QuestInput {
   delete: Boolean!
 }
 
+input NewLogInput {
+  id: Int!
+  uid: ID!
+  questId: Int!
+  enemy: String!
+  minutes: Int!
+  done: Boolean!
+  startTime: String!
+}
+
+input UpdateLogInput {
+  id: Int!
+  uid: ID!
+  questId: Int
+  enemy: String
+  minutes: Int
+  done: Boolean
+  startTime: String
+}
+
 type Subscription {
   questEdited: [Quest!]!
+  logAdded: [Log!]!
 }

@@ -16,6 +16,9 @@ export class NewLogInput {
   @MaxLength(30)
   enemy: string;
 
+  @Field((type) => Int)
+  minutes: number;
+
   @Field()
   done: boolean;
 

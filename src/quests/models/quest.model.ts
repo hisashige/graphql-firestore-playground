@@ -1,6 +1,6 @@
 import { Field, ID, Int, ObjectType } from "@nestjs/graphql";
 
-@ObjectType({ description: "quset " })
+@ObjectType({ description: "quest " })
 export class Quest {
   @Field((type) => Int)
   id: number;
