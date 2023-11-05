@@ -18,7 +18,7 @@ type Quest {
 """log """
 type Log {
   id: Int!
-  uid: String!
+  uid: ID!
   questId: Int!
   enemy: String!
   minutes: Int!
@@ -29,16 +29,14 @@ type Log {
 }
 
 type Query {
-  quests(uid: String!): [Quest!]!
-  log(uid: String!, id: Float!): Log!
-  logs(uid: String!): [Log!]!
+  quests: [Quest!]!
+  logs: [Log!]!
 }
 
 type Mutation {
-  editQuests(bulkUpdateQuestsData: BulkUpdateQuestInput!): [Quest!]!
-  addLog(addLogInput: NewLogInput!): Log!
-  updateLog(updateLogInput: UpdateLogInput!): Log!
-  removeLog(uid: String!, id: Float!): Boolean!
+  editQuests(bulkUpdateQuestData: BulkUpdateQuestInput!): [Quest!]!
+  createLog(logData: LogInput!): Log!
+  updateLog(logData: LogInput!): Log!
 }
 
 input BulkUpdateQuestInput {
@@ -53,9 +51,8 @@ input QuestInput {
   delete: Boolean!
 }
 
-input NewLogInput {
+input LogInput {
   id: Int!
-  uid: ID!
   questId: Int!
   enemy: String!
   minutes: Int!
@@ -63,17 +60,7 @@ input NewLogInput {
   startTime: String!
 }
 
-input UpdateLogInput {
-  id: Int!
-  uid: ID!
-  questId: Int
-  enemy: String
-  minutes: Int
-  done: Boolean
-  startTime: String
-}
-
 type Subscription {
-  questEdited: [Quest!]!
-  logAdded: [Log!]!
+  questUpdated: [Quest!]!
+  logUpdated: [Log!]!
 }

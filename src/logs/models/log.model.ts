@@ -1,11 +1,11 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Field, ID, Int, ObjectType } from "@nestjs/graphql";
 
 @ObjectType({ description: "log " })
 export class Log {
   @Field((type) => Int)
   id: number;
 
-  @Field()
+  @Field((type) => ID)
   uid: string;
 
   @Field((type) => Int)
@@ -27,5 +27,5 @@ export class Log {
   createdAt: string;
 
   @Field({ nullable: true })
-  updatedAt: string;
+  updatedAt: string | null;
 }
