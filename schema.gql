@@ -15,12 +15,28 @@ type Quest {
   updatedAt: String
 }
 
+"""log """
+type Log {
+  id: Int!
+  uid: ID!
+  questId: Int!
+  enemy: String!
+  minutes: Int!
+  done: Boolean!
+  startTime: String!
+  createdAt: String!
+  updatedAt: String
+}
+
 type Query {
   quests(uid: String!): [Quest!]!
+  logs(uid: String!): [Log!]!
 }
 
 type Mutation {
   editQuests(bulkUpdateQuestsData: BulkUpdateQuestInput!): [Quest!]!
+  createLog(logData: LogInput!): Log!
+  updateLog(logData: LogInput!): Log!
 }
 
 input BulkUpdateQuestInput {
@@ -35,6 +51,17 @@ input QuestInput {
   delete: Boolean!
 }
 
+input LogInput {
+  id: Int!
+  uid: ID!
+  questId: Int!
+  enemy: String!
+  minutes: Int!
+  done: Boolean!
+  startTime: String!
+}
+
 type Subscription {
-  questEdited: [Quest!]!
+  questUpdated: [Quest!]!
+  logUpdated: [Log!]!
 }

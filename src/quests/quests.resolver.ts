@@ -22,12 +22,12 @@ export class QuestsResolver {
     BulkUpdateQuestInput: BulkUpdateQuestInput
   ): Promise<Quest[]> {
     const quests = await this.questsService.updateQuests(BulkUpdateQuestInput);
-    pubSub.publish("questAdded", { questAdded: quests });
+    pubSub.publish("questUpdated", { questAdded: quests });
     return quests;
   }
 
   @Subscription((returns) => [Quest])
-  questEdited() {
-    return pubSub.asyncIterator("questAdded");
+  questUpdated() {
+    return pubSub.asyncIterator("questUpdated");
   }
 }

@@ -2,7 +2,7 @@ import { ArgsType, Field } from "@nestjs/graphql";
 import { MaxLength, MinLength } from "class-validator";
 
 @ArgsType()
-export class QuestsArgs {
+export class LogsArgs {
   @Field()
   @MaxLength(32)
   @MinLength(1)
