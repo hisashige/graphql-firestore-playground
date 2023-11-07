@@ -40,7 +40,6 @@ type Mutation {
 }
 
 input BulkUpdateQuestInput {
-  uid: ID!
   quests: [QuestInput!]!
 }
 
