@@ -29,8 +29,8 @@ type Log {
 }
 
 type Query {
-  quests(uid: String!): [Quest!]!
-  logs(uid: String!): [Log!]!
+  quests: [Quest!]!
+  logs: [Log!]!
 }
 
 type Mutation {
@@ -40,7 +40,6 @@ type Mutation {
 }
 
 input BulkUpdateQuestInput {
-  uid: ID!
   quests: [QuestInput!]!
 }
 
@@ -53,7 +52,6 @@ input QuestInput {
 
 input LogInput {
   id: Int!
-  uid: ID!
   questId: Int!
   enemy: String!
   minutes: Int!

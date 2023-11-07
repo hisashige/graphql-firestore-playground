@@ -1,6 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { QuestInput } from "./dto/quest.input";
-import { QuestsArgs } from "./dto/quests.args";
 import { Quest } from "./models/quest.model";
 import { getQuestCollection } from "src/utils/firestore";
 import { now } from "src/utils/dateUtils";
@@ -10,7 +8,10 @@ import { QuestItem } from "./types";
 
 @Injectable()
 export class QuestsService {
-  async updateQuests(data: BulkUpdateQuestInput): Promise<Quest[]> {
+  async updateQuests(
+    uid: string,
+    data: BulkUpdateQuestInput
+  ): Promise<Quest[]> {
     try {
       const firestore = getFirestore();
       const questCollection = getQuestCollection();
@@ -20,11 +21,11 @@ export class QuestsService {
 
       for (const item of data.quests) {
         const exitData = await questCollection
-          .where("uid", "==", data.uid)
+          .where("uid", "==", uid)
           .where("id", "==", item.id)
           .get();
 
-        let modifyItem = { ...item, uid: data.uid } as QuestItem;
+        let modifyItem = { ...item, uid } as QuestItem;
 
         if (exitData.docs.length > 0) {
           // 更新
@@ -34,7 +35,7 @@ export class QuestsService {
           // 新規作成
           modifyItem.createdAt = now();
           modifyItem.updatedAt = null;
-          const docRef = questCollection.doc(`${data.uid}_${item.id}`);
+          const docRef = questCollection.doc(`${uid}_${item.id}`);
           batch.set(docRef, modifyItem);
         }
 
@@ -49,11 +50,9 @@ export class QuestsService {
     }
   }
 
-  async findListByUid(questsArgs: QuestsArgs): Promise<Quest[]> {
+  async findListByUid(uid: string): Promise<Quest[]> {
     const questCollection = getQuestCollection();
-    const quests = await questCollection
-      .where("uid", "==", questsArgs.uid)
-      .get();
+    const quests = await questCollection.where("uid", "==", uid).get();
 
     if (quests.docs.length > 0) {
       return quests.docs.map((doc) => doc.data()) as Quest[];

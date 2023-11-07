@@ -1,9 +1,17 @@
-import { Args, Mutation, Query, Resolver, Subscription } from "@nestjs/graphql";
+import {
+  Args,
+  Context,
+  Mutation,
+  Query,
+  Resolver,
+  Subscription,
+} from "@nestjs/graphql";
 import { PubSub } from "graphql-subscriptions";
-import { LogsArgs } from "./dto/logs.args";
 import { Log } from "./models/log.model";
 import { LogsService } from "./logs.service";
 import { LogInput } from "./dto/log.input";
+import { UseGuards } from "@nestjs/common";
+import { AuthGuard } from "src/common/guards/auth.guard";
 
 const pubSub = new PubSub();
 
@@ -12,26 +20,34 @@ export class LogsResolver {
   constructor(private readonly logsService: LogsService) {}
 
   @Query((returns) => [Log])
-  logs(@Args() logsArgs: LogsArgs): Promise<Log[]> {
-    return this.logsService.findListByUid(logsArgs);
+  @UseGuards(AuthGuard)
+  logs(@Context() context): Promise<Log[]> {
+    const user = context.req.user;
+    return this.logsService.findListByUid(user.uid);
   }
 
   @Mutation((returns) => Log)
+  @UseGuards(AuthGuard)
   async createLog(
+    @Context() context,
     @Args("logData", { type: () => LogInput })
     logInput: LogInput
   ): Promise<Log> {
-    const log = await this.logsService.createLog(logInput);
+    const user = context.req.user;
+    const log = await this.logsService.createLog(user.uid, logInput);
     pubSub.publish("logUpdated", { logAdded: log });
     return log;
   }
 
   @Mutation((returns) => Log)
+  @UseGuards(AuthGuard)
   async updateLog(
+    @Context() context,
     @Args("logData", { type: () => LogInput })
     logInput: LogInput
   ): Promise<Log> {
-    const log = await this.logsService.updateLog(logInput);
+    const user = context.req.user;
+    const log = await this.logsService.updateLog(user.uid, logInput);
     pubSub.publish("logUpdated", { logAdded: log });
     return log;
   }

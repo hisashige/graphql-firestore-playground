@@ -6,9 +6,6 @@ export class LogInput {
   @Field((type) => Int)
   id: number;
 
-  @Field((type) => ID)
-  uid: string;
-
   @Field((type) => Int)
   questId: number;
 

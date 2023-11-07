@@ -7,9 +7,9 @@ import { now } from "src/utils/dateUtils";
 
 @Injectable()
 export class LogsService {
-  async findListByUid(logsArgs: LogsArgs): Promise<Log[]> {
+  async findListByUid(uid: string): Promise<Log[]> {
     const logCollection = getLogCollection();
-    const logs = await logCollection.where("uid", "==", logsArgs.uid).get();
+    const logs = await logCollection.where("uid", "==", uid).get();
 
     if (logs.docs.length > 0) {
       return logs.docs.map((doc) => doc.data()) as Log[];
@@ -18,11 +18,12 @@ export class LogsService {
     return [] as Log[];
   }
 
-  async createLog(logInput: LogInput): Promise<Log> {
+  async createLog(uid: string, logInput: LogInput): Promise<Log> {
     const logCollection = getLogCollection();
-    const docRef = logCollection.doc(`${logInput.uid}_${logInput.id}`);
+    const docRef = logCollection.doc(`${uid}_${logInput.id}`);
     const log = {
       ...logInput,
+      uid,
       createdAt: now(),
       updatedAt: null,
     };
@@ -30,21 +31,21 @@ export class LogsService {
     return log;
   }
 
-  async updateLog(logInput: LogInput): Promise<Log> {
+  async updateLog(uid: string, logInput: LogInput): Promise<Log> {
     const logCollection = getLogCollection();
 
     const exitData = await logCollection
-      .where("uid", "==", logInput.uid)
+      .where("uid", "==", uid)
       .where("id", "==", logInput.id)
       .get();
 
     if (exitData.docs.length === 0) {
       throw new NotFoundException(
-        `Log with ID[${logInput.id}] UID[${logInput.uid}] not found`
+        `Log with ID[${logInput.id}] UID[${uid}] not found`
       );
     }
 
-    const docRef = logCollection.doc(`${logInput.uid}_${logInput.id}`);
+    const docRef = logCollection.doc(`${uid}_${logInput.id}`);
     const log = {
       ...logInput,
       updatedAt: now(),
@@ -53,6 +54,7 @@ export class LogsService {
 
     const rtnLog = {
       ...log,
+      uid,
       createdAt: exitData.docs[0].data().createdAt as string,
     };
     return rtnLog;
