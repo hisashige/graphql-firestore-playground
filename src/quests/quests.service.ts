@@ -29,6 +29,7 @@ export class QuestsService {
 
         if (exitData.docs.length > 0) {
           // 更新
+          modifyItem.createdAt = exitData.docs[0].data().createdAt;
           modifyItem.updatedAt = now();
           batch.update(exitData.docs[0].ref, modifyItem);
         } else {

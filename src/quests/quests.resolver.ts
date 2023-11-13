@@ -30,7 +30,7 @@ export class QuestsResolver {
   @UseGuards(AuthGuard)
   async editQuests(
     @Context() context,
-    @Args("bulkUpdateQuestsData", { type: () => BulkUpdateQuestInput })
+    @Args("bulkUpdateQuestData", { type: () => BulkUpdateQuestInput })
     BulkUpdateQuestInput: BulkUpdateQuestInput
   ): Promise<Quest[]> {
     const user = context.req.user;

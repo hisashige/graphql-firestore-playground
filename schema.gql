@@ -34,7 +34,7 @@ type Query {
 }
 
 type Mutation {
-  editQuests(bulkUpdateQuestsData: BulkUpdateQuestInput!): [Quest!]!
+  editQuests(bulkUpdateQuestData: BulkUpdateQuestInput!): [Quest!]!
   createLog(logData: LogInput!): Log!
   updateLog(logData: LogInput!): Log!
 }
