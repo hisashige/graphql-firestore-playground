@@ -4,7 +4,7 @@
 
 directive @upper on FIELD_DEFINITION
 
-"""quset """
+"""quest """
 type Quest {
   id: Int!
   uid: ID!

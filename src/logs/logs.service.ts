@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { LogInput } from "./dto/log.input";
-import { LogsArgs } from "./dto/logs.args";
 import { Log } from "./models/log.model";
 import { getLogCollection } from "src/utils/firestore";
 import { now } from "src/utils/dateUtils";

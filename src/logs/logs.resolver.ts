@@ -12,16 +12,17 @@ import { LogsService } from "./logs.service";
 import { LogInput } from "./dto/log.input";
 import { UseGuards } from "@nestjs/common";
 import { AuthGuard } from "src/common/guards/auth.guard";
+import { RequestContext } from "src/types/context";
 
 const pubSub = new PubSub();
 
-@Resolver((of) => Log)
+@Resolver(() => Log)
 export class LogsResolver {
   constructor(private readonly logsService: LogsService) {}
 
   @Query((returns) => [Log])
   @UseGuards(AuthGuard)
-  logs(@Context() context): Promise<Log[]> {
+  logs(@Context() context: RequestContext): Promise<Log[]> {
     const user = context.req.user;
     return this.logsService.findListByUid(user.uid);
   }
@@ -29,7 +30,7 @@ export class LogsResolver {
   @Mutation((returns) => Log)
   @UseGuards(AuthGuard)
   async createLog(
-    @Context() context,
+    @Context() context: RequestContext,
     @Args("logData", { type: () => LogInput })
     logInput: LogInput
   ): Promise<Log> {
@@ -42,7 +43,7 @@ export class LogsResolver {
   @Mutation((returns) => Log)
   @UseGuards(AuthGuard)
   async updateLog(
-    @Context() context,
+    @Context() context: RequestContext,
     @Args("logData", { type: () => LogInput })
     logInput: LogInput
   ): Promise<Log> {

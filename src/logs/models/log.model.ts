@@ -27,5 +27,5 @@ export class Log {
   createdAt: string;
 
   @Field({ nullable: true })
-  updatedAt: string;
+  updatedAt: string | null;
 }

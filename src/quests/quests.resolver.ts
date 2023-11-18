@@ -12,16 +12,17 @@ import { QuestsService } from "./quests.service";
 import { BulkUpdateQuestInput } from "./dto/bulk-update-quest.input";
 import { AuthGuard } from "src/common/guards/auth.guard";
 import { UseGuards } from "@nestjs/common";
+import { RequestContext } from "src/types/context";
 
 const pubSub = new PubSub();
 
-@Resolver((of) => Quest)
+@Resolver(() => Quest)
 export class QuestsResolver {
   constructor(private readonly questsService: QuestsService) {}
 
   @Query((returns) => [Quest])
   @UseGuards(AuthGuard)
-  quests(@Context() context): Promise<Quest[]> {
+  quests(@Context() context: RequestContext): Promise<Quest[]> {
     const user = context.req.user;
     return this.questsService.findListByUid(user.uid);
   }
@@ -29,7 +30,7 @@ export class QuestsResolver {
   @Mutation((returns) => [Quest])
   @UseGuards(AuthGuard)
   async editQuests(
-    @Context() context,
+    @Context() context: RequestContext,
     @Args("bulkUpdateQuestData", { type: () => BulkUpdateQuestInput })
     BulkUpdateQuestInput: BulkUpdateQuestInput
   ): Promise<Quest[]> {

@@ -48,6 +48,7 @@ export class QuestsService {
       return rtnItems as Quest[];
     } catch (e) {
       console.error("Error updating document: ", e);
+      throw e;
     }
   }
 
